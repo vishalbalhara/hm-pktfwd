@@ -4,7 +4,7 @@
 
 ####################################################################################################
 ########################### Stage: PktFwd Python App Builder #######################################
-FROM balenalib/raspberry-pi-debian-python:buster-build-20211014 as pktfwd-builder
+FROM balenalib/aarch64-debian-python:3.9-buster-build as pktfwd-builder
 
 # Variables used internally to this stage
 ENV INPUT_DIR=/opt/input
@@ -21,7 +21,7 @@ RUN pip3 install --target="$OUTPUT_DIR" --no-cache-dir -r requirements.txt
 
 ###################################################################################################
 ################################## Stage: runner ##################################################
-FROM balenalib/raspberry-pi-debian-python:buster-run-20211014 as pktfwd-runner
+FROM balenalib/aarch64-debian-python:3.9-buster-run as pktfwd-runner
 
 ENV ROOT_DIR=/opt
 
