@@ -47,12 +47,6 @@ ENV RESET_LGW_FILEPATH="$ROOT_DIR/reset_lgw.sh"
 
 WORKDIR "$ROOT_DIR"
 
-# Copy python app
-COPY pktfwd/ "$PYTHON_APP_DIR"
-
-# Copy reset script
-COPY reset_lgw.sh "$RESET_LGW_FILEPATH"
-
 # Copy sx1301 lora_pkt_fwd_SPI_BUS
 # hadolint ignore=DL3022
 COPY --from=nebraltd/packet_forwarder:b0e1c24414e1564a1d01328b2109e1accb181f97 "$SX1301_PACKET_FORWARDER_OUTPUT_DIR" "$SX1301_DIR"
@@ -64,10 +58,11 @@ COPY --from=nebraltd/sx1302_hal:9a72ce59c22b0434bdbaf9091542a7d8419bddee "$SX130
 # Copy pktfwd python app dependencies
 COPY --from=pktfwd-builder "$PKTFWD_BUILDER_OUTPUT_DIR" "$PYTHON_DEPENDENCIES_DIR"
 
-# Cleanup
-RUN apt-get autoremove -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Copy python app
+COPY pktfwd/ "$PYTHON_APP_DIR"
+
+# Copy reset script
+COPY reset_lgw.sh "$RESET_LGW_FILEPATH"
 
 # Add python dependencies to PYTHONPATH
 ENV PYTHONPATH="${PYTHONPATH}:${PYTHON_DEPENDENCIES_DIR}"
